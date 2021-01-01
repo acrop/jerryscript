@@ -43,6 +43,7 @@ extern "C"
 
 #define JERRY_LIKELY(x) __builtin_expect(!!(x), 1)
 #define JERRY_UNLIKELY(x) __builtin_expect(!!(x), 0)
+#define JERRY_ALWAYS_INLINE(x) inline x __attribute__((always_inline))
 
 #endif /* __GNUC__ */
 
@@ -54,6 +55,8 @@ extern "C"
 #define JERRY_ATTR_DEPRECATED __declspec(deprecated)
 #define JERRY_ATTR_NOINLINE __declspec(noinline)
 #define JERRY_ATTR_NORETURN __declspec(noreturn)
+
+#define JERRY_ALWAYS_INLINE(x) __forceinline x
 
 /*
  * Microsoft Visual C/C++ Compiler doesn't support for VLA, using _alloca
@@ -157,6 +160,13 @@ void * __cdecl _alloca (size_t _Size);
 #ifndef JERRY_UNLIKELY
 #define JERRY_UNLIKELY(x) (x)
 #endif /* !JERRY_UNLIKELY */
+
+/**
+ * Macro to setup function attributes to force inline function to all call sites.
+ */
+#ifndef JERRY_ALWAYS_INLINE
+#define JERRY_ALWAYS_INLINE(x) inline
+#endif /* !JERRY_ALWAYS_INLINE */
 
 /**
  * Helper to declare (or mimic) a C99 variable-length array.
